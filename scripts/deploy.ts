@@ -12,8 +12,8 @@ import path from 'path';
 import yargs from 'yargs';
 
 import {
-  chainMetadata,
   MultiProvider,
+  chainMetadata,
   serializeContracts,
 } from '@hyperlane-xyz/sdk';
 
@@ -66,14 +66,15 @@ async function deployWarpRoute() {
   const signer = new ethers.Wallet(privateKey);
 
   console.log('Preparing chain providers');
-  const multiProvider = new MultiProvider(
-    { ...chainMetadata, ...chainConfigs }
-  );
-  multiProvider.setSharedSigner(signer)
+  const multiProvider = new MultiProvider({
+    ...chainMetadata,
+    ...chainConfigs,
+  });
+  multiProvider.setSharedSigner(signer);
 
   console.log('Starting deployments');
-  const deployer = new HypERC20Deployer(multiProvider, tokenConfigs, undefined);
-  await deployer.deploy();
+  const deployer = new HypERC20Deployer(multiProvider);
+  await deployer.deploy(tokenConfigs);
 
   console.log('Deployments successful. Deployed contracts:');
   // @ts-ignore
